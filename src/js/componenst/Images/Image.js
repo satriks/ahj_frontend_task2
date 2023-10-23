@@ -3,11 +3,10 @@ export default class FormImage {
     this.src = url
     this.img = document.createElement('img')
     this.img.src = this.src
-    
+
     const name = url.split('/')
     this.name = name[name.length - 1]
-    console.log(this.name, 'this name');
-
+    console.log(this.name, 'this name')
   }
 
   get url () {

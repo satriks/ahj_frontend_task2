@@ -21,20 +21,19 @@ export default class ImageControl {
   }
 
   drawDom = () => {
-    
     fetch('http://192.168.31.18:7070?method=getimages')
-    .then(resp => resp.json())
-    .then(res => {
-      this.images.forEach(el => el.remove())
-      this.images = []
-      res.forEach(el => {
-        const image = new FormImage(this.server +'/' + el)
-        this.images.push(image)
-        image.img.addEventListener('error', this.errorImage)
-        
-        this.imagePlace.insertAdjacentElement('beforeend', image.url)
+      .then(resp => resp.json())
+      .then(res => {
+        this.images.forEach(el => el.remove())
+        this.images = []
+        res.forEach(el => {
+          const image = new FormImage(this.server + '/' + el)
+          this.images.push(image)
+          image.img.addEventListener('error', this.errorImage)
+
+          this.imagePlace.insertAdjacentElement('beforeend', image.url)
+        })
       })
-    })
   }
 
   onSubmit = (event) => {
@@ -57,12 +56,11 @@ export default class ImageControl {
   }
 
   onClose = (event) => {
-
     if (event.target.classList.contains('close')) {
       const src = event.target.closest('.image-wrapper').querySelector('img').src
-      const image = this.images.find(el => el.src === src )
+      const image = this.images.find(el => el.src === src)
       event.target.closest('.image-wrapper').remove()
-      fetch(`${this.server}?method=removeimage&name=${image.name}`, {method: 'POST'})
+      fetch(`${this.server}?method=removeimage&name=${image.name}`, { method: 'POST' })
     }
   }
 
@@ -73,22 +71,19 @@ export default class ImageControl {
   onFile = (event) => {
     const file = this.inputFile.files && this.inputFile.files[0]
     this.renderFile(file)
-
   }
-
 
   onDrop = (event) => {
     event.preventDefault()
     const file = event.dataTransfer.files && event.dataTransfer.files[0]
     this.renderFile(file)
- 
   }
 
   renderFile = (file) => {
     const data = new FormData()
     data.append('file', file)
 
-    fetch('http://192.168.31.18:7070?method=addimage', {method: 'POST', body : data})
+    fetch('http://192.168.31.18:7070?method=addimage', { method: 'POST', body: data })
     const url = URL.createObjectURL(file)
     this.inputUrl.value = url
     this.addButton.dispatchEvent(new MouseEvent('click'))
